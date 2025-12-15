@@ -1,8 +1,12 @@
 {
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.561.0",
+    "multer": "^2.0.2",
     "mysql2": "^3.15.3",
     "next": "^14.0.0",
     "react": "^18.2.0",
@@ -16,6 +20,7 @@
     "@types/node": "^20.0.0",
     "@types/react": "19.2.7",
     "autoprefixer": "^10.4.23",
+    "nodemon": "^3.1.11",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",
@@ -25,5 +30,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
-  }
+  },
+  "name": "sigta1",
+  "version": "1.0.0",
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewantara-gth/sigTA1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dewantara-gth/sigTA1/issues"
+  },
+  "homepage": "https://github.com/dewantara-gth/sigTA1#readme"
 }
