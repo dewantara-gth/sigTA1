@@ -13,12 +13,18 @@ db.getConnection()
     
     // Start Server
     app.listen(PORT, () => {
+      console.log('╔════════════════════════════════════════════╗');
+      console.log('║        SIGTA Backend Server Running        ║');
+      console.log('╚════════════════════════════════════════════╝');
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📍 Environment: ${process.env.NODE_ENV}`);
       console.log(`🌐 API URL: http://localhost:${PORT}/api`);
+      console.log(`📖 Health Check: http://localhost:${PORT}/`);
+      console.log('');
     });
   })
   .catch(err => {
     console.error('❌ Database connection failed:', err.message);
+    console.error('💡 Check your .env database configuration!');
     process.exit(1);
   });

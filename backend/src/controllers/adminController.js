@@ -51,9 +51,12 @@ const getAllDosen = async (req, res) => {
   try {
     const dosen = await db.query(
       `SELECT d.id, d.nik, d.username, d.nama, d.email, d.no_telp, d.foto_profil,
-       ps.nama_prodi, ps.kode_prodi
+       ps.nama_prodi, ps.kode_prodi,
+       COUNT(m.id) as jumlah_mahasiswa
        FROM dosen d
        LEFT JOIN program_studi ps ON d.id_prodi = ps.id
+       LEFT JOIN mahasiswa m ON d.id = m.id_dosen_pembimbing
+       GROUP BY d.id, d.nik, d.username, d.nama, d.email, d.no_telp, d.foto_profil, ps.nama_prodi, ps.kode_prodi
        ORDER BY d.nama ASC`
     );
 
@@ -178,6 +181,14 @@ const updateDosen = async (req, res) => {
       const emailCheck = await db.query('SELECT id FROM dosen WHERE email = ? AND id != ?', [email, id]);
       if (emailCheck.length > 0) {
         return validationError(res, { email: 'Email already exists' });
+      }
+    }
+
+    // Check NIK uniqueness (exclude current dosen)
+    if (nik) {
+      const nikCheck = await db.query('SELECT id FROM dosen WHERE nik = ? AND id != ?', [nik, id]);
+      if (nikCheck.length > 0) {
+        return validationError(res, { nik: 'NIK already exists' });
       }
     }
 
@@ -363,6 +374,14 @@ const updateMahasiswa = async (req, res) => {
       }
     }
 
+    // Check NIM uniqueness (exclude current mahasiswa)
+    if (nim) {
+      const nimCheck = await db.query('SELECT id FROM mahasiswa WHERE nim = ? AND id != ?', [nim, id]);
+      if (nimCheck.length > 0) {
+        return validationError(res, { nim: 'NIM already exists' });
+      }
+    }
+
     // Update mahasiswa
     await db.query(
       `UPDATE mahasiswa 
@@ -402,7 +421,7 @@ const deleteMahasiswa = async (req, res) => {
 };
 
 // ==========================================
-// GET ALL USERS (for Daftar Pengguna page)
+// GET ALL USERS
 // ==========================================
 
 /**
@@ -439,10 +458,6 @@ const getAllUsers = async (req, res) => {
     return errorResponse(res, 'Failed to get users', 500, error.message);
   }
 };
-
-// ==========================================
-// EXPORTS
-// ==========================================
 
 module.exports = {
   getDashboard,

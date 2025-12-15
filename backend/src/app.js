@@ -43,8 +43,7 @@ app.get('/', (req, res) => {
     endpoints: {
       auth: '/api/auth',
       admin: '/api/admin',
-      dosen: '/api/dosen',
-      mahasiswa: '/api/mahasiswa'
+      berita: '/api/berita'
     }
   });
 });
@@ -52,16 +51,12 @@ app.get('/', (req, res) => {
 // API Routes
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const beritaRoutes = require('./routes/beritaRoutes');
 
 // Auth Routes
 app.use('/api/auth', authRoutes);
 
 // Admin Routes
 app.use('/api/admin', adminRoutes);
-
-// Berita Routes
-app.use('/api/berita', beritaRoutes);
 
 // ===========================================
 // ERROR HANDLING

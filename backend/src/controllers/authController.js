@@ -83,25 +83,8 @@ const login = async (req, res) => {
       return unauthorizedResponse(res, 'Username atau password salah');
     }
 
-    // Debug: Check password field
-    console.log('User found:', { username: user.username, hasPassword: !!user.password });
-    
     // Verify password
-    let isPasswordValid = false;
-    
-    try {
-      // Kalau password masih plain text (untuk testing)
-      if (user.password === password) {
-        console.log('⚠️ WARNING: Plain text password detected!');
-        isPasswordValid = true;
-      } else {
-        // Hash password
-        isPasswordValid = await bcrypt.compare(password, user.password);
-      }
-    } catch (err) {
-      console.error('Password compare error:', err);
-      return errorResponse(res, 'Error verifying password', 500, err.message);
-    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     
     if (!isPasswordValid) {
       return unauthorizedResponse(res, 'Username atau password salah');
@@ -130,14 +113,19 @@ const login = async (req, res) => {
         ...(role === 'dosen' && { 
           nik: user.nik,
           prodi: user.nama_prodi,
-          no_telp: user.no_telp 
+          no_telp: user.no_telp,
+          foto_profil: user.foto_profil
         }),
         ...(role === 'mahasiswa' && { 
           nim: user.nim,
           prodi: user.nama_prodi,
           dosen_pembimbing: user.nama_dosen,
           judul_ta: user.judul_ta,
-          no_telp: user.no_telp
+          no_telp: user.no_telp,
+          foto_profil: user.foto_profil
+        }),
+        ...(role === 'admin' && {
+          foto_profil: user.foto_profil
         })
       }
     }, 'Login berhasil');
@@ -159,7 +147,7 @@ const getCurrentUser = async (req, res) => {
 
     if (role === 'admin') {
       const results = await db.query(
-        'SELECT id, username, nama, email FROM admin WHERE id = ?',
+        'SELECT id, username, nama, email, foto_profil FROM admin WHERE id = ?',
         [id]
       );
       user = results[0];
